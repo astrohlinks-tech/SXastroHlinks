@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AstroLinks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-img: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLUs-d3Bm1yNWa03qjD1rtOTS4wwYZpsAnvphJ6hkXsg&s=10');
+      --neon: #00ff8c;
+      --neon-strong: rgba(0,255,140,0.95);
+      --neon-dim: rgba(0,255,140,0.14);
+      --glass: rgba(0,0,0,0.36);
+      --card-bg: rgba(8,8,10,0.48);
+      --muted: #9aa9a0;
+      --text: #e6f7ef;
+      --radius: 12px;
+      font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;background:#000;color:var(--text);margin:0}
+
+    /* Background with lighter blur so it shows more */
+    .bg{
+      position:fixed;inset:0;background-image:var(--bg-img);background-size:cover;background-position:center;filter:blur(2px) brightness(0.55) saturate(1.05);z-index:-2;transform:scale(1.03);
+    }
+    .bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.55));}
+
+    .container{min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:20px;padding:28px 18px}
+
+    header{position:relative;display:flex;align-items:center;justify-content:center;width:100%;max-width:1180px}
+    h1.site-title{font-weight:800;font-size:clamp(26px,4.2vw,44px);letter-spacing:1px;color:var(--text);margin:0;text-align:center;position:relative;padding:12px 20px}
+    h1.site-title .glow{color:var(--neon);text-shadow:0 0 10px var(--neon-strong),0 0 26px rgba(0,255,140,0.22);}
+
+    /* logo top-right (translucent with soft glow border) */
+    .logo-wrap{position:absolute;right:6px;top:2px}
+    .logo{width:68px;height:68px;border-radius:12px;padding:6px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,255,140,0.12);box-shadow:0 6px 26px rgba(0,255,140,0.06);
+      transition:transform .18s ease, box-shadow .18s ease}
+    .logo img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+    .logo:focus,.logo:hover{transform:translateY(-6px);box-shadow:0 18px 48px rgba(0,255,140,0.14)}
+
+    /* Search */
+    .search-area{width:100%;max-width:980px;display:flex;justify-content:center}
+    .search{
+      width:100%;background:linear-gradient(180deg, rgba(0,0,0,0.44), rgba(0,0,0,0.36));border-radius:999px;padding:8px 10px;display:flex;align-items:center;gap:10px;border:1px solid rgba(0,255,140,0.12);box-shadow:0 6px 30px rgba(0,0,0,0.5) inset, 0 6px 18px rgba(0,255,140,0.02);
+      transition:box-shadow .22s ease, transform .18s ease}
+    .search:focus-within{box-shadow:0 10px 54px rgba(0,255,140,0.08), 0 0 48px rgba(0,255,140,0.06);transform:translateY(-2px)}
+
+    .search input{flex:1;background:transparent;border:0;outline:none;padding:12px 6px;font-size:15px;color:var(--text)}
+    .search .icon{
+      width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,255,140,0.12);background:linear-gradient(180deg, rgba(0,0,0,0.34), rgba(255,255,255,0.02));cursor:pointer;transition:transform .22s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease}
+    .search .icon svg{width:22px;height:22px;filter:drop-shadow(0 0 8px rgba(0,255,140,0.6))}
+
+    /* Button styles (improved) */
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid rgba(0,255,140,0.12);background:linear-gradient(180deg, rgba(0,0,0,0.45), rgba(255,255,255,0.01));color:var(--neon);font-weight:600;text-decoration:none;cursor:pointer;transition:transform .12s ease, box-shadow .12s ease}
+    .btn:active{transform:translateY(2px) scale(.995);box-shadow:inset 0 2px 18px rgba(0,0,0,0.5)}
+    .btn--primary{box-shadow:0 6px 30px rgba(0,255,140,0.06);}
+    .btn--neon{background:linear-gradient(180deg, rgba(0,255,140,0.05), rgba(0,255,140,0.02));color:#001b0f}
+
+    /* main area */
+    main{width:100%;max-width:1180px;display:flex;flex-direction:column;gap:18px}
+    .hero{padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.02)}
+    .hero h2{font-size:clamp(18px,3.2vw,26px);margin:0 0 6px 0;font-weight:700}
+    .hero p{margin:0;color:var(--muted);font-size:14px}
+
+    /* grid cards (smaller & tighter) */
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .card{position:relative;overflow:hidden;border-radius:12px;padding:0;height:180px;background:var(--card-bg);border:1px solid rgba(0,255,140,0.06);box-shadow:0 6px 22px rgba(2,6,8,0.55);transition:transform .22s cubic-bezier(.2,.9,.2,1), box-shadow .22s ease}
+    .card-thumb{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(0.72);transform:scale(1.04);transition:transform .6s ease}
+    .card .meta{position:absolute;inset:auto 0 0 0;padding:12px;background:linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.48));backdrop-filter:blur(4px);}
+    .card h3{margin:0;font-size:13px;letter-spacing:0.6px}
+    .card a{color:var(--neon);display:inline-block;margin-top:6px;font-weight:600;font-size:13px}
+    .card:hover{transform:translateY(-8px);box-shadow:0 28px 72px rgba(0,255,140,0.08);}
+    .card:hover .card-thumb{transform:scale(1.08)}
+
+    /* smaller image icon inside meta for compact look */
+    .meta .thumb-mini{width:44px;height:44px;border-radius:8px;overflow:hidden;float:right;margin-left:12px;border:1px solid rgba(255,255,255,0.03)}
+    .meta .thumb-mini img{width:100%;height:100%;object-fit:cover;display:block}
+
+    /* hover glow border */
+    .card::after{content:'';position:absolute;inset:0;border-radius:12px;pointer-events:none;box-shadow:inset 0 0 34px rgba(0,255,140,0.03);opacity:0;transition:opacity .18s ease}
+    .card:hover::after{opacity:1}
+
+    /* mobile responsiveness */
+    @media (max-width:980px){.cards{grid-template-columns:repeat(2,1fr)}.logo{width:60px;height:60px}}
+    @media (max-width:600px){.cards{grid-template-columns:1fr}.container{padding:18px}.logo-wrap{position:static;transform:none;align-self:flex-end}}
+
+    footer{width:100%;max-width:1180px;text-align:center;padding:16px 6px;color:var(--muted);font-size:13px}
+
+    /* subtle entrance animations (smoother) */
+    .hero, .cards, header{opacity:0;transform:translateY(8px);animation:fadeInUp .62s cubic-bezier(.16,.84,.32,1) forwards}
+    header{animation-delay:.06s}.hero{animation-delay:.10s}.cards{animation-delay:.14s}
+    @keyframes fadeInUp{to{opacity:1;transform:none}}
+
+    /* accessibility */
+    .sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+
+  </style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+  <div class="container">
+    <header>
+      <h1 class="site-title"><span class="glow">AstroLinks</span></h1>
+      <div class="logo-wrap" title="AstroLinks logo">
+        <button class="logo" aria-label="Abrir perfil do AstroLinks">
+          <img src="https://i.pinimg.com/736x/a4/09/c9/a409c9868c90aa155c3fe82719bdf41b.jpg" alt="logo" />
+        </button>
+      </div>
+    </header>
+
+    <div class="search-area" aria-hidden="false">
+      <div class="search" role="search" aria-label="Pesquisar links">
+        <input id="searchInput" placeholder="Pesquise por jogo ou app..." aria-label="Pesquisar" />
+        <button class="icon" id="searchIcon" title="Pesquisar">
+          <!-- animated magnifier -->
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="color:var(--neon)"/>
+            <circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.6" style="color:var(--neon)"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <main>
+      <section class="hero" aria-labelledby="welcome">
+        <h2 id="welcome">Bem-vindo ao AstroLinks 🚀</h2>
+        <p>O portal que conecta você diretamente aos seus jogos e aplicativos favoritos.</p>
+      </section>
+
+      <section class="cards" id="cards">
+        <article class="card" data-title="SUMMERTIME SAGA GAME REVIEW" tabindex="0" onclick="openLink('https://4br.me/Ee9sZRb')" style="cursor:pointer">
+          <div class="card-thumb" style="background-image:url('https://miro.medium.com/v2/1*ZqdGAfLQ4BB6kp464V_9Cg.jpeg')"></div>
+          <div class="meta">
+            <h3>SUMMERTIME SAGA GAME REVIEW</h3>
+            <a href="https://4br.me/Ee9sZRb" target="_blank" rel="noopener">Abrir link</a>
+            <div class="thumb-mini" aria-hidden="true"><img src="https://miro.medium.com/v2/1*ZqdGAfLQ4BB6kp464V_9Cg.jpeg" alt=""></div>
+          </div>
+        </article>
+
+        <article class="card" data-title="MOBGIRL TRAIN APK" tabindex="0" onclick="openLink('https://4br.me/80J8SZV')" style="cursor:pointer">
+          <div class="card-thumb" style="background-image:url('https://apktodo.io/uploads/2025/3/mob-girl-capture-academy-free.jpg')"></div>
+          <div class="meta">
+            <h3>MOBGIRL TRAIN APK</h3>
+            <a href="https://4br.me/80J8SZV" target="_blank" rel="noopener">Abrir link</a>
+            <div class="thumb-mini" aria-hidden="true"><img src="https://apktodo.io/uploads/2025/3/mob-girl-capture-academy-free.jpg" alt=""></div>
+          </div>
+        </article>
+
+        <article class="card" data-title="CRYPTID PARK" tabindex="0" onclick="openLink('https://4br.me/rHIS1cszkd')" style="cursor:pointer">
+          <div class="card-thumb" style="background-image:url('https://i.scdn.co/image/ab6765630000ba8a870cab949d36740b1c892f28')"></div>
+          <div class="meta">
+            <h3>CRYPTID PARK</h3>
+            <a href="https://4br.me/rHIS1cszkd" target="_blank" rel="noopener">Abrir link</a>
+            <div class="thumb-mini" aria-hidden="true"><img src="https://i.scdn.co/image/ab6765630000ba8a870cab949d36740b1c892f28" alt=""></div>
+          </div>
+        </article>
+
+        <article class="card" data-title="FUTURE QUEST" tabindex="0" onclick="openLink('https://4br.me/qE9tXZv')" style="cursor:pointer">
+          <div class="card-thumb" style="background-image:url('https://static.vecteezy.com/system/resources/previews/008/953/585/large_2x/futuristic-gaming-city-neon-glow-free-photo.jpg')"></div>
+          <div class="meta">
+            <h3>FUTURE QUEST</h3>
+            <a href="https://4br.me/qE9tXZv" target="_blank" rel="noopener">Abrir link</a>
+            <div class="thumb-mini" aria-hidden="true"><img src="https://static.vecteezy.com/system/resources/previews/008/953/585/large_2x/futuristic-gaming-city-neon-glow-free-photo.jpg" alt=""></div>
+          </div>
+        </article>
+
+      </section>
+
+    </main>
+
+    <footer>© 2025 AstroLinks. Todos os direitos reservados.</footer>
+
+  </div>
+
+  <script>
+    // Open link helper
+    function openLink(url){window.open(url, '_blank', 'noopener');}
+
+    // Search filter (live)
+    const input = document.getElementById('searchInput');
+    const cards = Array.from(document.querySelectorAll('.card'));
+
+    input.addEventListener('input', (e)=>{
+      const q = e.target.value.trim().toLowerCase();
+      cards.forEach(c=>{
+        const title = c.dataset.title.toLowerCase();
+        const match = title.includes(q);
+        c.style.display = match || q === '' ? '' : 'none';
+      });
+    });
+
+    // keyboard accessibility: Enter on card opens link
+    document.querySelectorAll('.card').forEach(card=>{
+      card.addEventListener('keydown', (e)=>{if(e.key==='Enter'){card.click();}});
+    });
+
+    // animate search icon on focus with neon pulse
+    const icon = document.getElementById('searchIcon');
+    input.addEventListener('focus', ()=>{icon.animate([{transform:'scale(1)'},{transform:'scale(1.08)'},{transform:'scale(1)'}],{duration:520,iterations:1});pulse(icon)});
+    function pulse(el){el.animate([{boxShadow:'0 0 0px rgba(0,255,140,0.0)'},{boxShadow:'0 0 18px rgba(0,255,140,0.12)'},{boxShadow:'0 0 0px rgba(0,255,140,0.0)'}],{duration:900,iterations:1})}
+
+    // small warm-up glow for title
+    const title = document.querySelector('.site-title .glow');
+    if(title){setInterval(()=>{title.animate([{filter:'blur(0px)', opacity:1},{filter:'blur(0.6px)', opacity:0.96},{filter:'blur(0px)', opacity:1}],{duration:4200,iterations:1})},5000)}
+  </script>
+</body>
+</html>
