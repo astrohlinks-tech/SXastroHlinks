@@ -1,313 +1,292 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AstroLinks</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg-img: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLUs-d3Bm1yNWa03qjD1rtOTS4wwYZpsAnvphJ6hkXsg&s=10');
-      --neon: #00ff8c;
-      --neon-strong: rgba(0,255,140,0.95);
-      --neon-dim: rgba(0,255,140,0.14);
-      --glass: rgba(0,0,0,0.36);
-      --card-bg: rgba(8,8,10,0.48);
-      --muted: #9aa9a0;
-      --text: #e6f7ef;
-      --radius: 12px;
-      font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;background:#000;color:var(--text);margin:0}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AstroH-Links</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-img: url('https://i.pinimg.com/564x/cf/05/cf/cf05cf0dae9ca68cd8e154e67d6db62a.jpg');
+  --text: #e6f7ef;
+  --muted: #9aa9a0;
+  --neon: #00ff8c;
+  --card-bg: rgba(8,8,10,0.48);
+}
 
-    /* Background with lighter blur so it shows more */
-    .bg{
-      position:fixed;inset:0;background-image:var(--bg-img);background-size:cover;background-position:center;filter:blur(2px) brightness(0.55) saturate(1.05);z-index:-2;transform:scale(1.03);
-    }
-    .bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.55));}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Poppins',sans-serif;
+  color:var(--text);
+  height:100%;
+  background:#000;
+  position:relative;
+  overflow-x:hidden;
+}
 
-    .container{min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:20px;padding:28px 18px}
+/* Fundo com blur */
+body::before{
+  content:'';
+  position:fixed; inset:0;
+  background-image: var(--bg-img);
+  background-size: cover;
+  background-position: center;
+  filter: blur(2px) brightness(0.55) saturate(1.05);
+  z-index:-2;
+}
+body::after{
+  content:'';
+  position:fixed; inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.55));
+  z-index:-1;
+}
 
-    header{position:relative;display:flex;align-items:center;justify-content:center;width:100%;max-width:1180px}
-    h1.site-title{font-weight:800;font-size:clamp(26px,4.2vw,44px);letter-spacing:1px;color:var(--text);margin:0;text-align:center;position:relative;padding:12px 20px}
-    h1.site-title .glow{color:var(--neon);text-shadow:0 0 10px var(--neon-strong),0 0 26px rgba(0,255,140,0.22);}
+/* Cabeçalho */
+header{text-align:center;padding:40px 20px 20px;position:relative;}
+.site-title{
+  font-size:2.8rem;
+  font-weight:800;
+  color:var(--neon);
+  text-shadow:0 0 12px var(--neon);
+}
 
-    /* logo top-right (translucent with soft glow border) */
-    .logo-wrap{position:absolute;right:6px;top:2px}
-    .logo{width:68px;height:68px;border-radius:12px;padding:6px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,255,140,0.12);box-shadow:0 6px 26px rgba(0,255,140,0.06);
-      transition:transform .18s ease, box-shadow .18s ease}
-    .logo img{width:100%;height:100%;object-fit:cover;border-radius:10px}
-    .logo:focus,.logo:hover{transform:translateY(-6px);box-shadow:0 18px 48px rgba(0,255,140,0.14)}
+/* Marca d’água fixa */
+.logo-watermark{
+  position:fixed;
+  top:20px;right:20px;
+  width:68px;height:68px;
+  border-radius:12px;
+  padding:6px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(0,255,140,0.12);
+  box-shadow:0 6px 26px rgba(0,255,140,0.06);
+  transition:transform .18s ease, box-shadow .18s ease;
+  z-index:9999;
+}
+.logo-watermark img{
+  width:100%;height:100%;object-fit:cover;border-radius:10px;
+}
+.logo-watermark:hover{
+  transform:translateY(-6px);
+  box-shadow:0 18px 48px rgba(0,255,140,0.14);
+}
 
-    /* Search */
-    .search-area{width:100%;max-width:980px;display:flex;justify-content:center}
-    .search{
-  width:100%;
-  background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.8));
-  border-radius:999px;
-  padding:8px 10px;
+/* Barra de pesquisa */
+.search-bar{display:flex;justify-content:center;margin:20px auto;}
+.search-bar input{
+  width:100%;max-width:400px;
+  padding:10px 15px;
+  border-radius:30px;
+  border:2px solid var(--neon);
+  font-size:1rem;
+  outline:none;
+  background:#fff;color:#000;
+}
+
+/* Abas com rolagem */
+.tabs-wrapper{
   display:flex;
   align-items:center;
-  gap:10px;
-  border:1px solid rgba(0,255,140,0.25);
-  box-shadow:0 6px 20px rgba(255,255,255,0.3) inset, 0 4px 18px rgba(0,255,140,0.05);
-  transition:box-shadow .22s ease, transform .18s ease;
+  gap:6px;
+  margin:20px;
+  justify-content:center;
 }
-    .search:focus-within{box-shadow:0 10px 54px rgba(0,255,140,0.08), 0 0 48px rgba(0,255,140,0.06);transform:translateY(-2px)}
+.scroll-left, .scroll-right{
+  background: rgba(0,255,140,0.1);
+  border:none;
+  padding:8px 10px;
+  border-radius:10px;
+  cursor:pointer;
+  color:var(--neon);
+  font-weight:bold;
+  font-size:1.1rem;
+  transition:0.2s;
+}
+.scroll-left:hover, .scroll-right:hover{
+  background:var(--neon);
+  color:#000;
+}
+.tabs{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  scroll-behavior:smooth;
+  flex:1;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab-button{
+  padding:10px 16px;
+  min-width:60px;
+  border-radius:12px;
+  border:none;
+  background:linear-gradient(180deg,rgba(0,255,140,0.1),rgba(0,255,140,0.02));
+  color:var(--neon);
+  font-weight:600;
+  cursor:pointer;
+  font-size:1.1rem;
+  transition:0.2s;
+  flex-shrink:0;
+}
+.tab-button:hover{
+  transform:translateY(-3px);
+  box-shadow:0 0 20px var(--neon);
+}
+.tab-button.active{
+  background:var(--neon);
+  color:#000;
+}
 
-    .search input{flex:1;background:transparent;border:0;outline:none;padding:12px 6px;font-size:15px;color:var(--text)}
-    .search .icon{
-      width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,255,140,0.12);background:linear-gradient(180deg, rgba(0,0,0,0.34), rgba(255,255,255,0.02));cursor:pointer;transition:transform .22s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease}
-    .search .icon svg{width:22px;height:22px;filter:drop-shadow(0 0 8px rgba(0,255,140,0.6))}
-
-    /* Button styles (improved) */
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid rgba(0,255,140,0.12);background:linear-gradient(180deg, rgba(0,0,0,0.45), rgba(255,255,255,0.01));color:var(--neon);font-weight:600;text-decoration:none;cursor:pointer;transition:transform .12s ease, box-shadow .12s ease}
-    .btn:active{transform:translateY(2px) scale(.995);box-shadow:inset 0 2px 18px rgba(0,0,0,0.5)}
-    .btn--primary{box-shadow:0 6px 30px rgba(0,255,140,0.06);}
-    .btn--neon{background:linear-gradient(180deg, rgba(0,255,140,0.05), rgba(0,255,140,0.02));color:#001b0f}
-
-    /* main area */
-    main{width:100%;max-width:1180px;display:flex;flex-direction:column;gap:18px}
-    .hero{padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.02)}
-    .hero h2{font-size:clamp(18px,3.2vw,26px);margin:0 0 6px 0;font-weight:700}
-    .hero p{margin:0;color:var(--muted);font-size:14px}
-
-    /* grid cards (smaller & tighter) */
-    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-    .card{position:relative;overflow:hidden;border-radius:12px;padding:0;height:180px;background:var(--card-bg);border:1px solid rgba(0,255,140,0.06);box-shadow:0 6px 22px rgba(2,6,8,0.55);transition:transform .22s cubic-bezier(.2,.9,.2,1), box-shadow .22s ease}
-    .card-thumb{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(0.72);transform:scale(1.04);transition:transform .6s ease}
-    .card .meta{position:absolute;inset:auto 0 0 0;padding:12px;background:linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.48));backdrop-filter:blur(4px);}
-    .card h3{margin:0;font-size:13px;letter-spacing:0.6px}
-    .card a{color:var(--neon);display:inline-block;margin-top:6px;font-weight:600;font-size:13px}
-    .card:hover{transform:translateY(-8px);box-shadow:0 28px 72px rgba(0,255,140,0.08);}
-    .card:hover .card-thumb{transform:scale(1.08)}
-
-    /* smaller image icon inside meta for compact look */
-    .meta .thumb-mini{width:44px;height:44px;border-radius:8px;overflow:hidden;float:right;margin-left:12px;border:1px solid rgba(255,255,255,0.03)}
-    .meta .thumb-mini img{width:100%;height:100%;object-fit:cover;display:block}
-
-    /* hover glow border */
-    .card::after{content:'';position:absolute;inset:0;border-radius:12px;pointer-events:none;box-shadow:inset 0 0 34px rgba(0,255,140,0.03);opacity:0;transition:opacity .18s ease}
-    .card:hover::after{opacity:1}
-
-    /* mobile responsiveness */
-    @media (max-width:980px){.cards{grid-template-columns:repeat(2,1fr)}.logo{width:60px;height:60px}}
-    @media (max-width:600px){.cards{grid-template-columns:1fr}.container{padding:18px}.logo-wrap{position:static;transform:none;align-self:flex-end}}
-
-    footer{width:100%;max-width:1180px;text-align:center;padding:16px 6px;color:var(--muted);font-size:13px}
-
-    /* subtle entrance animations (smoother) */
-    .hero, .cards, header{opacity:0;transform:translateY(8px);animation:fadeInUp .62s cubic-bezier(.16,.84,.32,1) forwards}
-    header{animation-delay:.06s}.hero{animation-delay:.10s}.cards{animation-delay:.14s}
-    @keyframes fadeInUp{to{opacity:1;transform:none}}
-
-    /* accessibility */
-    .sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
-
-  </style>
+/* Cards dos jogos */
+.games{
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+  justify-content:center;
+  margin:0 20px 40px;
+}
+.card{
+  background:var(--card-bg);
+  border-radius:12px;
+  width:220px;
+  cursor:pointer;
+  transition:transform 0.3s,box-shadow 0.3s;
+  overflow:hidden;
+  position:relative;
+}
+.card:hover{
+  transform:scale(1.05);
+  box-shadow:0 12px 28px rgba(0,255,140,0.5);
+}
+.card-thumb{
+  width:100%;
+  height:140px;
+  background-size:cover;
+  background-position:center;
+  border-radius:12px 12px 0 0;
+}
+.meta{padding:12px;}
+.meta h3{font-size:1rem;margin-bottom:6px;}
+.meta a{
+  display:inline-block;
+  text-decoration:none;
+  color:var(--neon);
+  border:1px solid var(--neon);
+  padding:5px 10px;
+  border-radius:6px;
+  font-size:0.85rem;
+  transition:0.2s;
+}
+.meta a:hover{background:var(--neon);color:#000;}
+footer{text-align:center;padding:20px;color:var(--muted);font-size:0.9rem;}
+</style>
 </head>
 <body>
-  <div class="bg" aria-hidden="true"></div>
-  <div class="container">
-    <header>
-      <h1 class="site-title"><span class="glow">AstroLinks</span></h1>
-      <div class="logo-wrap" title="AstroLinks logo">
-        <button class="logo" aria-label="Abrir perfil do AstroLinks">
-          <img src="https://i.pinimg.com/736x/a4/09/c9/a409c9868c90aa155c3fe82719bdf41b.jpg" alt="logo" />
-        </button>
-      </div>
-    </header>
 
-    <div class="search-area" aria-hidden="false">
-      <div class="search" role="search" aria-label="Pesquisar links">
-        <input id="searchInput" placeholder="Pesquise por jogo ou app..." aria-label="Pesquisar" />
-        <button class="icon" id="searchIcon" title="Pesquisar">
-          <!-- animated magnifier -->
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="color:var(--neon)"/>
-            <circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.6" style="color:var(--neon)"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <main>
-      <section class="hero" aria-labelledby="welcome">
-        <h2 id="welcome">Bem-vindo ao AstroLinks 🚀</h2>
-        <p>O portal que conecta você diretamente aos seus jogos e aplicativos favoritos.</p>
-      </section>
-
-<article class="card" data-title="COUNTRYSIDE LIFE APK" tabindex="0" onclick="openLink('https://4br.me/SGxL4ZBqV')" style="cursor:pointer; position: relative;">
-  <div class="card-thumb" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIu0OWOK1PFWBP4cjgSahU7EoI0hDfzZnUxm9Al_ThcDoOCGC82G1t3Qp9&s=10')"></div>
-
-  <!-- 🔥 Banner NOVO -->
-  <div class="badge-novo">NOVO</div>
-
-  <div class="meta">
-    <h3>COUNTRYSIDE LIFE APK</h3>
-    <a href="https://4br.me/SGxL4ZBqV" target="_blank" rel="noopener">Abrir link</a>
-    <div class="thumb-mini" aria-hidden="true">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIu0OWOK1PFWBP4cjgSahU7EoI0hDfzZnUxm9Al_ThcDoOCGC82G1t3Qp9&s=10" alt="">
-    </div>
+<header>
+  <h1 class="site-title">AstroH-Links</h1>
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="Pesquise por jogo...">
   </div>
-</article>
+</header>
 
-<style>
-  /* 🔰 Estilo do selo NOVO */
-  .badge-novo {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: linear-gradient(135deg, #00ff99, #00ccff);
-    color: #000;
-    font-weight: 800;
-    font-size: 12px;
-    padding: 5px 10px;
-    border-radius: 8px;
-    letter-spacing: 1px;
-    box-shadow: 0 0 12px rgba(0, 255, 140, 0.7), 0 0 25px rgba(0, 255, 255, 0.4);
-    text-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
-    animation: pulse 2s infinite ease-in-out;
+<!-- Marca d'água -->
+<div class="logo-watermark">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmfuPs2OWYmXVjCJb4y6mpzz_ien1kJgX-rA&usqp=CAU" alt="logo">
+</div>
+
+<!-- Abas com setas -->
+<div class="tabs-wrapper">
+  <button class="scroll-left">◀</button>
+  <div class="tabs" id="tabs"></div>
+  <button class="scroll-right">▶</button>
+</div>
+
+<div id="tabContents"></div>
+<footer>© 2025 AstroH-Links. Todos os direitos reservados.</footer>
+
+<script>
+// Lista de jogos
+const games = [
+  {title:"SUMMERTIME SAGA GAME REVIEW", image:"https://miro.medium.com/v2/1*ZqdGAfLQ4BB6kp464V_9Cg.jpeg", link:"https://4br.me/Ee9sZRb"},
+  {title:"MOBGIRL TRAIN APK", image:"https://apktodo.io/uploads/2025/3/mob-girl-capture-academy-free.jpg", link:"https://4br.me/80J8SZV"},
+  {title:"CRYPTID PARK", image:"https://i.scdn.co/image/ab6765630000ba8a870cab949d36740b1c892f28", link:"https://4br.me/rHIS1cszkd"},
+  {title:"NTR.Legend", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSozOLLOu4gd5EhymsxIZV-UoWfPl6EfEvAaukmnKjpbxQtr6jfcKGa55w&s=10", link:"https://4br.me/R0cFLaYt"},
+  {title:"Pixel Simulasi Terseru APK", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkrFlSxn1IUfRfDRLB1mLal_9sO87nw0tJgq-vEufXFBvRPcQ9-1pUTdg&s=10", link:"https://4br.me/sUBkGxta"},
+  {title:"Rec", image:"https://i.ytimg.com/vi/_Xy7NlaG35U/sddefault.jpg", link:"https://4br.me/5EWJDtdHlT"},
+  {title:"Countryside Life APK", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIu0OWOK1PFWBP4cjgSahU7EoI0hDfzZnUxm9Al_ThcDoOCGC82G1t3Qp9&s=10", link:"https://4br.me/SGxL4ZBq"},
+  {title:"Lonely Girl 4.5.1", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSelQ2-Qec4490KKlOwDi8_gwWvAADFvuoLdbjT3S2tEzihzcw3K1OZ3wZs", link:"https://4br.me/50Oc7mAqX"},
+  {title:"Exit.infinity 6.8", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpoyhvGAPkWVR-ywKhtUuIbfL3Hs2hCJsiiSv0pY3bT9g9JPxAZoFgZX8y&s=10", link:"https://4br.me/zckSFAQj"}
+];
+
+const gamesPerTab = 4;
+const tabsContainer = document.getElementById('tabs');
+const tabContentsContainer = document.getElementById('tabContents');
+const totalTabs = Math.ceil(games.length / gamesPerTab);
+
+// Criação dinâmica das abas
+for(let i=0;i<totalTabs;i++){
+  const tabBtn = document.createElement('button');
+  tabBtn.className='tab-button';
+  if(i===0) tabBtn.classList.add('active');
+  tabBtn.innerText = (i+1);
+  tabBtn.dataset.tab=i;
+  tabsContainer.appendChild(tabBtn);
+
+  const tabDiv = document.createElement('div');
+  tabDiv.className='games';
+  tabDiv.style.display = i===0?'flex':'none';
+  tabDiv.id='tab-'+i;
+
+  const start = i*gamesPerTab;
+  const end = start+gamesPerTab;
+  const gamesSlice = games.slice(start,end);
+
+  gamesSlice.forEach(game=>{
+    const article = document.createElement('article');
+    article.className='card';
+    article.dataset.title=game.title;
+    const thumb = document.createElement('div');
+    thumb.className='card-thumb';
+    thumb.style.backgroundImage=`url('${game.image}')`;
+    const meta = document.createElement('div');
+    meta.className='meta';
+    const h3=document.createElement('h3'); h3.innerText=game.title;
+    const a=document.createElement('a'); a.href=game.link; a.target='_blank'; a.rel='noopener'; a.innerText='Abrir link';
+    meta.appendChild(h3); meta.appendChild(a);
+    article.appendChild(thumb); article.appendChild(meta);
+    tabDiv.appendChild(article);
+  });
+
+  tabContentsContainer.appendChild(tabDiv);
+}
+
+// Alternar abas
+tabsContainer.addEventListener('click', e=>{
+  if(e.target.classList.contains('tab-button')){
+    const tabIndex = e.target.dataset.tab;
+    document.querySelectorAll('.tab-button').forEach(b=>b.classList.remove('active'));
+    e.target.classList.add('active');
+    document.querySelectorAll('.games').forEach(div=>div.style.display='none');
+    document.getElementById('tab-'+tabIndex).style.display='flex';
   }
+});
 
-  /* 💫 Animação leve de brilho */
-  @keyframes pulse {
-    0%, 100% {
-      transform: scale(1);
-      box-shadow: 0 0 10px rgba(0, 255, 140, 0.5), 0 0 25px rgba(0, 255, 255, 0.3);
-    }
-    50% {
-      transform: scale(1.08);
-      box-shadow: 0 0 22px rgba(0, 255, 140, 0.9), 0 0 35px rgba(0, 255, 255, 0.6);
-    }
-  }
-</style>
-<article class="card" data-title="Lonely Girl APK 4.5.1" tabindex="0" onclick="openLink('https://4br.me/50Oc7mAqX')" style="cursor:pointer">
-  <div class="card-thumb" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSelQ2-Qec4490KKlOwDi8_gwWvAADFvuoLdbjT3S2tEzihzcw3K1OZ3wZs&s=10')"></div>
-  <div class="meta">
-    <h3>Lonely Girl APK 4.5.1</h3>
-    <a href="https://4br.me/50Oc7mAqX" target="_blank" rel="noopener">Abrir link</a>
-    <div class="thumb-mini" aria-hidden="true">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSelQ2-Qec4490KKlOwDi8_gwWvAADFvuoLdbjT3S2tEzihzcw3K1OZ3wZs&s=10" alt="">
-    </div>
-  </div>
-</article>
-<article class="card" data-title="REC" tabindex="0" onclick="openLink('https://4br.me/5EWJDtdHlT')" style="cursor:pointer">
-  <div class="card-thumb" style="background-image:url('https://i.ytimg.com/vi/_Xy7NlaG35U/sddefault.jpg')"></div>
-  <div class="meta">
-    <h3>REC</h3>
-    <a href="https://4br.me/5EWJDtdHlT" target="_blank" rel="noopener">Abrir link</a>
-    <div class="thumb-mini" aria-hidden="true">
-      <img src="https://i.ytimg.com/vi/_Xy7NlaG35U/sddefault.jpg" alt="">
-    </div>
-  </div>
-</article>
-<article class="card" data-title="NTR.LEGEND" tabindex="0" onclick="openLink('https://4br.me/R0cFLaYt')" style="cursor:pointer">
-  <div class="card-thumb" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSozOLLOu4gd5EhymsxIZV-UoWfPl6EfEvAaukmnKjpbxQtr6jfcKGa55w&s=10')"></div>
-  <div class="meta">
-    <h3>NTR.LEGEND</h3>
-    <a href="https://4br.me/R0cFLaYt" target="_blank" rel="noopener">Abrir link</a>
-    <div class="thumb-mini" aria-hidden="true">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSozOLLOu4gd5EhymsxIZV-UoWfPl6EfEvAaukmnKjpbxQtr6jfcKGa55w&s=10" alt="">
-    </div>
-  </div>
-</article>
-      <section class="cards" id="cards">
-        <article class="card" data-title="SUMMERTIME SAGA GAME REVIEW" tabindex="0" onclick="openLink('https://4br.me/Ee9sZRb')" style="cursor:pointer">
-          <div class="card-thumb" style="background-image:url('https://miro.medium.com/v2/1*ZqdGAfLQ4BB6kp464V_9Cg.jpeg')"></div>
-          <div class="meta">
-            <h3>SUMMERTIME SAGA GAME REVIEW</h3>
-            <a href="https://4br.me/Ee9sZRb" target="_blank" rel="noopener">Abrir link</a>
-            <div class="thumb-mini" aria-hidden="true"><img src="https://miro.medium.com/v2/1*ZqdGAfLQ4BB6kp464V_9Cg.jpeg" alt=""></div>
-          </div>
-        </article>
+// Rolagem suave nas abas
+const scrollAmount = 180;
+document.querySelector('.scroll-left').addEventListener('click',()=>tabsContainer.scrollBy({left:-scrollAmount,behavior:'smooth'}));
+document.querySelector('.scroll-right').addEventListener('click',()=>tabsContainer.scrollBy({left:scrollAmount,behavior:'smooth'}));
 
-        <article class="card" data-title="MOBGIRL TRAIN APK" tabindex="0" onclick="openLink('https://4br.me/80J8SZV')" style="cursor:pointer">
-          <div class="card-thumb" style="background-image:url('https://apktodo.io/uploads/2025/3/mob-girl-capture-academy-free.jpg')"></div>
-          <div class="meta">
-            <h3>MOBGIRL TRAIN APK</h3>
-            <a href="https://4br.me/80J8SZV" target="_blank" rel="noopener">Abrir link</a>
-            <div class="thumb-mini" aria-hidden="true"><img src="https://apktodo.io/uploads/2025/3/mob-girl-capture-academy-free.jpg" alt=""></div>
-          </div>
-        </article>
-
-        <article class="card" data-title="CRYPTID PARK" tabindex="0" onclick="openLink('https://4br.me/rHIS1cszkd')" style="cursor:pointer">
-          <div class="card-thumb" style="background-image:url('https://i.scdn.co/image/ab6765630000ba8a870cab949d36740b1c892f28')"></div>
-          <div class="meta">
-            <h3>CRYPTID PARK</h3>
-            <a href="https://4br.me/rHIS1cszkd" target="_blank" rel="noopener">Abrir link</a>
-            <div class="thumb-mini" aria-hidden="true"><img src="https://i.scdn.co/image/ab6765630000ba8a870cab949d36740b1c892f28" alt=""></div>
-          </div>
-        </article>
-        <article class="card" data-title="PIXEL SIMULASI TERSERU APK" tabindex="0" onclick="openLink('https://4br.me/sUBkGxta')" style="cursor:pointer">
-  <div class="card-thumb" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkrFlSxn1IUfRfDRLB1mLal_9sO87nw0tJgq-vEufXFBvRPcQ9-1pUTdg&s=10')"></div>
-  <div class="meta">
-    <h3>PIXEL SIMULASI TERSERU APK</h3>
-    <a href="https://4br.me/sUBkGxta" target="_blank" rel="noopener">Abrir link</a>
-    <div class="thumb-mini" aria-hidden="true">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkrFlSxn1IUfRfDRLB1mLal_9sO87nw0tJgq-vEufXFBvRPcQ9-1pUTdg&s=10" alt="">
-    </div>
-  </div>
-</article>
-
-        <article class="card" data-title="FUTURE QUEST" tabindex="0" onclick="openLink('https://4br.me/qE9tXZv')" style="cursor:pointer">
-          <div class="card-thumb" style="background-image:url('https://static.vecteezy.com/system/resources/previews/008/953/585/large_2x/futuristic-gaming-city-neon-glow-free-photo.jpg')"></div>
-          <div class="meta">
-            <h3>FUTURE QUEST</h3>
-            <a href="https://4br.me/qE9tXZv" target="_blank" rel="noopener">Abrir link</a>
-            <div class="thumb-mini" aria-hidden="true"><img src="https://static.vecteezy.com/system/resources/previews/008/953/585/large_2x/futuristic-gaming-city-neon-glow-free-photo.jpg" alt=""></div>
-            <article class="card" data-title="EXIT INFINITY 6.8">
-  <div class="card-thumb" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpoyhvGAPkWVR-ywKhtUuIbfL3Hs2hCJsiiSv0pY3bT9g9JPxAZoFgZX8y&s=10')"></div>
-  <div class="meta">
-    <h3>EXIT INFINITY 6.8</h3>
-    <a href="https://4br.me/zckSFAQj" target="_blank" rel="noopener">Abrir link</a>
-    <div class="thumb-mini" aria-hidden="true">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpoyhvGAPkWVR-ywKhtUuIbfL3Hs2hCJsiiSv0pY3bT9g9JPxAZoFgZX8y&s=10" alt="">
-    </div>
-  </div>
-</article>
-          </div>
-        </article>
-
-      </section>
-
-    </main>
-
-    <footer>© 2025 AstroLinks. Todos os direitos reservados.</footer>
-
-  </div>
-
-  <script>
-    // Open link helper
-    function openLink(url){window.open(url, '_blank', 'noopener');}
-
-    // Search filter (live)
-    const input = document.getElementById('searchInput');
-    const cards = Array.from(document.querySelectorAll('.card'));
-
-    input.addEventListener('input', (e)=>{
-      const q = e.target.value.trim().toLowerCase();
-      cards.forEach(c=>{
-        const title = c.dataset.title.toLowerCase();
-        const match = title.includes(q);
-        c.style.display = match || q === '' ? '' : 'none';
-      });
-    });
-
-    // keyboard accessibility: Enter on card opens link
-    document.querySelectorAll('.card').forEach(card=>{
-      card.addEventListener('keydown', (e)=>{if(e.key==='Enter'){card.click();}});
-    });
-
-    // animate search icon on focus with neon pulse
-    const icon = document.getElementById('searchIcon');
-    input.addEventListener('focus', ()=>{icon.animate([{transform:'scale(1)'},{transform:'scale(1.08)'},{transform:'scale(1)'}],{duration:520,iterations:1});pulse(icon)});
-    function pulse(el){el.animate([{boxShadow:'0 0 0px rgba(0,255,140,0.0)'},{boxShadow:'0 0 18px rgba(0,255,140,0.12)'},{boxShadow:'0 0 0px rgba(0,255,140,0.0)'}],{duration:900,iterations:1})}
-
-    // small warm-up glow for title
-    const title = document.querySelector('.site-title .glow');
-    if(title){setInterval(()=>{title.animate([{filter:'blur(0px)', opacity:1},{filter:'blur(0.6px)', opacity:0.96},{filter:'blur(0px)', opacity:1}],{duration:4200,iterations:1})},5000)}
-  </script>
+// Pesquisa
+document.getElementById('search').addEventListener('input', e=>{
+  const query=e.target.value.toLowerCase();
+  document.querySelectorAll('.card').forEach(card=>{
+    const title=card.dataset.title.toLowerCase();
+    card.style.display=title.includes(query)?'block':'none';
+  });
+});
+</script>
 </body>
 </html>
