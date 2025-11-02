@@ -227,25 +227,16 @@ const tabsContainer = document.getElementById('tabs');
 const tabContentsContainer = document.getElementById('tabContents');
 const totalTabs = Math.ceil(games.length / gamesPerTab);
 
-// Criação dinâmica das abas
-for(let i=0;i<totalTabs;i++){
-  const tabBtn = document.createElement('button');
-  tabBtn.className='tab-button';
-  if(i===0) tabBtn.classList.add('active');
-  tabBtn.innerText = (i+1);
-  tabBtn.dataset.tab=i;
-  tabsContainer.appendChild(tabBtn);
-
-  const tabDiv = document.createElement('div');
-  tabDiv.className='games';
-  tabDiv.style.display = i===0?'flex':'none';
-  tabDiv.id='tab-'+i;
-
-  const start = i*gamesPerTab;
-  const end = start+gamesPerTab;
-  const gamesSlice = games.slice(start,end);
-
-  gamesSlice.forEach(game=>{
+// Função para exibir jogos
+function displayGames(gamesToShow) {
+  tabContentsContainer.innerHTML = '';
+  if(gamesToShow.length === 0){
+    tabContentsContainer.innerHTML = '<p style="text-align:center;width:100%;font-size:1.2em;color:var(--muted);">Nenhum jogo encontrado.</p>';
+    return;
+  }
+  const container = document.createElement('div');
+  container.className='games';
+  gamesToShow.forEach(game=>{
     const article = document.createElement('article');
     article.className='card';
     article.dataset.title=game.title;
@@ -258,11 +249,23 @@ for(let i=0;i<totalTabs;i++){
     const a=document.createElement('a'); a.href=game.link; a.target='_blank'; a.rel='noopener'; a.innerText='Abrir link';
     meta.appendChild(h3); meta.appendChild(a);
     article.appendChild(thumb); article.appendChild(meta);
-    tabDiv.appendChild(article);
+    container.appendChild(article);
   });
-
-  tabContentsContainer.appendChild(tabDiv);
+  tabContentsContainer.appendChild(container);
 }
+
+// Criação das abas
+for(let i=0;i<totalTabs;i++){
+  const tabBtn = document.createElement('button');
+  tabBtn.className='tab-button';
+  if(i===0) tabBtn.classList.add('active');
+  tabBtn.innerText = (i+1);
+  tabBtn.dataset.tab=i;
+  tabsContainer.appendChild(tabBtn);
+}
+
+// Exibe inicialmente a primeira aba
+displayGames(games.slice(0,gamesPerTab));
 
 // Alternar abas
 tabsContainer.addEventListener('click', e=>{
@@ -270,8 +273,9 @@ tabsContainer.addEventListener('click', e=>{
     const tabIndex = e.target.dataset.tab;
     document.querySelectorAll('.tab-button').forEach(b=>b.classList.remove('active'));
     e.target.classList.add('active');
-    document.querySelectorAll('.games').forEach(div=>div.style.display='none');
-    document.getElementById('tab-'+tabIndex).style.display='flex';
+    const start = tabIndex * gamesPerTab;
+    const end = start + gamesPerTab;
+    displayGames(games.slice(start,end));
   }
 });
 
@@ -280,37 +284,18 @@ const scrollAmount = 180;
 document.querySelector('.scroll-left').addEventListener('click',()=>tabsContainer.scrollBy({left:-scrollAmount,behavior:'smooth'}));
 document.querySelector('.scroll-right').addEventListener('click',()=>tabsContainer.scrollBy({left:scrollAmount,behavior:'smooth'}));
 
-// Pesquisa global corrigida
+// Pesquisa pela primeira letra
 document.getElementById('search').addEventListener('input', e=>{
   const query = e.target.value.toLowerCase().trim();
-  const allCards = document.querySelectorAll('.card');
-
   if(query === ''){
-    // Mostra aba ativa se o campo estiver vazio
+    // Se estiver vazio, mostra a aba ativa
     const activeTab = document.querySelector('.tab-button.active').dataset.tab;
-    document.querySelectorAll('.games').forEach(div=>div.style.display='none');
-    document.getElementById('tab-'+activeTab).style.display='flex';
-    allCards.forEach(c=>c.style.display='block');
-    return;
+    displayGames(games.slice(activeTab*gamesPerTab,(activeTab*gamesPerTab)+gamesPerTab));
+  } else {
+    // Pesquisa apenas pelo início do título
+    const filtered = games.filter(g => g.title.toLowerCase().startsWith(query));
+    displayGames(filtered);
   }
-
-  // Esconde todas as abas e mostra só os jogos filtrados
-  document.querySelectorAll('.games').forEach(div=>div.style.display='none');
-  const resultsContainer = document.getElementById('searchResults') || document.createElement('div');
-  resultsContainer.id = 'searchResults';
-  resultsContainer.className = 'games';
-  resultsContainer.innerHTML = '';
-
-  allCards.forEach(card=>{
-    const title = card.dataset.title.toLowerCase();
-    if(title.includes(query)){
-      resultsContainer.appendChild(card.cloneNode(true));
-    }
-  });
-
-  // Substitui o conteúdo visível
-  tabContentsContainer.innerHTML = '';
-  tabContentsContainer.appendChild(resultsContainer);
 });
 </script>
 </body>
