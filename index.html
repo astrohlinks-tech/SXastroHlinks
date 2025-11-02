@@ -218,7 +218,8 @@ const games = [
   {title:"Rec", image:"https://i.ytimg.com/vi/_Xy7NlaG35U/sddefault.jpg", link:"https://4br.me/5EWJDtdHlT"},
   {title:"Countryside Life APK", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIu0OWOK1PFWBP4cjgSahU7EoI0hDfzZnUxm9Al_ThcDoOCGC82G1t3Qp9&s=10", link:"https://4br.me/SGxL4ZBq"},
   {title:"Lonely Girl 4.5.1", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSelQ2-Qec4490KKlOwDi8_gwWvAADFvuoLdbjT3S2tEzihzcw3K1OZ3wZs", link:"https://4br.me/50Oc7mAqX"},
-  {title:"Exit.infinity 6.8", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpoyhvGAPkWVR-ywKhtUuIbfL3Hs2hCJsiiSv0pY3bT9g9JPxAZoFgZX8y&s=10", link:"https://4br.me/zckSFAQj"}
+  {title:"Exit.infinity 6.8", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpoyhvGAPkWVR-ywKhtUuIbfL3Hs2hCJsiiSv0pY3bT9g9JPxAZoFgZX8y&s=10", link:"https://4br.me/zckSFAQj"},
+  {title:"Sloven Classmate APK", image:"https://imgdownload.juxia.com/upload/202405/06/bb2a83aALMHPzwN.jpg", link:"https://4br.me/FzOpOKNktH"}
 ];
 
 const gamesPerTab = 4;
@@ -279,13 +280,37 @@ const scrollAmount = 180;
 document.querySelector('.scroll-left').addEventListener('click',()=>tabsContainer.scrollBy({left:-scrollAmount,behavior:'smooth'}));
 document.querySelector('.scroll-right').addEventListener('click',()=>tabsContainer.scrollBy({left:scrollAmount,behavior:'smooth'}));
 
-// Pesquisa
+// Pesquisa global corrigida
 document.getElementById('search').addEventListener('input', e=>{
-  const query=e.target.value.toLowerCase();
-  document.querySelectorAll('.card').forEach(card=>{
-    const title=card.dataset.title.toLowerCase();
-    card.style.display=title.includes(query)?'block':'none';
+  const query = e.target.value.toLowerCase().trim();
+  const allCards = document.querySelectorAll('.card');
+
+  if(query === ''){
+    // Mostra aba ativa se o campo estiver vazio
+    const activeTab = document.querySelector('.tab-button.active').dataset.tab;
+    document.querySelectorAll('.games').forEach(div=>div.style.display='none');
+    document.getElementById('tab-'+activeTab).style.display='flex';
+    allCards.forEach(c=>c.style.display='block');
+    return;
+  }
+
+  // Esconde todas as abas e mostra só os jogos filtrados
+  document.querySelectorAll('.games').forEach(div=>div.style.display='none');
+  const resultsContainer = document.getElementById('searchResults') || document.createElement('div');
+  resultsContainer.id = 'searchResults';
+  resultsContainer.className = 'games';
+  resultsContainer.innerHTML = '';
+
+  allCards.forEach(card=>{
+    const title = card.dataset.title.toLowerCase();
+    if(title.includes(query)){
+      resultsContainer.appendChild(card.cloneNode(true));
+    }
   });
+
+  // Substitui o conteúdo visível
+  tabContentsContainer.innerHTML = '';
+  tabContentsContainer.appendChild(resultsContainer);
 });
 </script>
 </body>
