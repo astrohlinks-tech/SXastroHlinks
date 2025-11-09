@@ -219,7 +219,10 @@ const games = [
   {title:"Countryside Life APK", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIu0OWOK1PFWBP4cjgSahU7EoI0hDfzZnUxm9Al_ThcDoOCGC82G1t3Qp9&s=10", link:"https://4br.me/SGxL4ZBq"},
   {title:"Lonely Girl 4.5.1", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSelQ2-Qec4490KKlOwDi8_gwWvAADFvuoLdbjT3S2tEzihzcw3K1OZ3wZs", link:"https://4br.me/50Oc7mAqX"},
   {title:"Exit.infinity 6.8", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpoyhvGAPkWVR-ywKhtUuIbfL3Hs2hCJsiiSv0pY3bT9g9JPxAZoFgZX8y&s=10", link:"https://4br.me/zckSFAQj"},
-  {title:"Sloven Classmate APK", image:"https://imgdownload.juxia.com/upload/202405/06/bb2a83aALMHPzwN.jpg", link:"https://4br.me/FzOpOKNktH"}
+  {title:"Sloven Classmate APK", image:"https://imgdownload.juxia.com/upload/202405/06/bb2a83aALMHPzwN.jpg", link:"https://4br.me/FzOpOKNktH"},
+
+  // 🔥 Novo jogo adicionado
+  {title:"Syahata's Bad Day APK", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3zfM2Ev6Sm1czmwl5y4GgEKRAlJkQuqUn3CUwA_QhZuCgbg-MQ1veK01i&s=10", link:"#"}
 ];
 
 const gamesPerTab = 4;
@@ -288,11 +291,9 @@ document.querySelector('.scroll-right').addEventListener('click',()=>tabsContain
 document.getElementById('search').addEventListener('input', e=>{
   const query = e.target.value.toLowerCase().trim();
   if(query === ''){
-    // Se estiver vazio, mostra a aba ativa
     const activeTab = document.querySelector('.tab-button.active').dataset.tab;
     displayGames(games.slice(activeTab*gamesPerTab,(activeTab*gamesPerTab)+gamesPerTab));
   } else {
-    // Pesquisa apenas pelo início do título
     const filtered = games.filter(g => g.title.toLowerCase().startsWith(query));
     displayGames(filtered);
   }
